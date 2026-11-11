@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter </title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #57336e, #21112f 75%);
+    font-family: 'Playfair Display', serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+.stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    color: #ffd9ff;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: .2; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.3); }
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 15px;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(32px, 6vw, 50px);
+    color: #ffd5f5;
+    text-shadow: 0 0 20px #ff7ce5;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    color: #e7c8f4;
+    font-size: 14px;
+    margin-bottom: 100px;
+}
+
+/* ENVELOPE */
+
+.envelope-wrapper {
+    position: relative;
+    width: min(500px, 90vw);
+    height: 300px;
+    perspective: 1200px;
+    margin-bottom: 50px;
+}
+
+.envelope {
+    position: absolute;
+    inset: 0;
+    background: #d65aab;
+    border-radius: 8px;
+    box-shadow: 0 15px 50px #ff4fce55;
+}
+
+/* Envelope sides */
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #f39bda, #c54a9e);
+    clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.envelope::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, #b93d91, #f18bc9);
+    clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+    z-index: 4;
+    pointer-events: none;
+}
+
+/* FLAP */
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 155px;
+    background: linear-gradient(135deg, #f8a6dc, #bc479b);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform .9s ease;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* LETTER */
+
+.letter {
+    position: absolute;
+    width: 90%;
+    height: 360px;
+    left: 5%;
+    top: 10px;
+    background: #fffaf0;
+    color: #51334a;
+    border-radius: 8px;
+    padding: 28px;
+    overflow-y: auto;
+    text-align: left;
+    z-index: 2;
+
+    transform: translateY(0) scale(.95);
+    opacity: 0;
+
+    transition:
+        transform 1s cubic-bezier(.2,.8,.2,1),
+        opacity .7s ease;
+
+    box-shadow: 0 5px 30px #0003;
+}
+
+.letter h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 32px;
+    text-align: center;
+    color: #c04c94;
+    margin-bottom: 25px;
+}
+
+.letter p {
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    overflow-wrap: break-word;
+}
+
+.signature {
+    text-align: right;
+    font-family: 'Dancing Script', cursive;
+    font-size: 23px;
+    color: #bd4b91;
+}
+
+/* HEART SEAL */
+
+.seal {
+    position: absolute;
+    z-index: 6;
+    left: 50%;
+    bottom: 65px;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 55px;
+    background: #a82d7c;
+    border: 3px solid #ffb7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    box-shadow: 0 0 20px #ff9be7;
+    transition: .5s;
+    pointer-events: none;
+}
+
+/* OPEN ANIMATION */
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope.open .letter {
+    transform: translateY(-310px) scale(1);
+    opacity: 1;
+    z-index: 7;
+}
+
+.envelope.open .seal {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+}
+
+/* BUTTONS */
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+button {
+    padding: 14px 30px;
+    border: 1px solid #ffb7f0;
+    border-radius: 40px;
+    color: white;
+    background: linear-gradient(135deg, #c84caa, #823fbb);
+    box-shadow: 0 0 15px #f66de977;
+    cursor: pointer;
+    font-size: 14px;
+    transition: .3s;
+}
+
+button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 30px #ff8ce9;
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+/* FLOATING HEARTS */
+
+.heart {
+    position: fixed;
+    bottom: -30px;
+    color: #ff9bdc;
+    pointer-events: none;
+    animation: floatUp 5s linear forwards;
+    z-index: 10;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0);
+        opacity: 0;
+    }
+    20% { opacity: 1; }
+    100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width: 550px) {
+    .envelope-wrapper {
+        width: 90vw;
+        height: 240px;
+    }
+
+    .letter {
+        height: 310px;
+        padding: 20px;
+    }
+
+    .letter h2 {
+        font-size: 27px;
+    }
+
+    .letter p {
+        font-size: 13px;
+    }
+
+    .envelope.open .letter {
+        transform: translateY(-270px) scale(1);
+    }
+
+    .flap {
+        height: 120px;
+    }
+
+    .subtitle {
+        margin-bottom: 90px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+    <h1>💌 A Letter for you</h1>
+    <p class="subtitle">A little message, just for you ♡</p>
+
+    <div class="envelope-wrapper">
+
+        <div class="envelope" id="envelope">
+
+            <div class="letter" id="letter">
+
+                <h2>Dear Shanel, ♡</h2>
+
+                <p>
+                    Hello! I just want to take this opportunity
+                    to tell you something important.
+                </p>
+
+                <p>
+                    Sometimes, words are not enough to express
+                    what we truly feel. But I hope this letter
+                    helps you understand how much your presence
+                    means.
+                </p>
+
+                <p>
+                    Sha I think this is the right time, I have something to tell you, i like you since August but dont worry i will not bother you i just want to confess my feelings but pls make this a secret for now.
+                     What ever is your answer  tell me, I hope I dont bother your peace and if you need someone to talk to im here to talk to you and comfort you. Sha I like you not because you're beautiful or your body but because of your kindness, being woman of God as i know, and valuing your friends/family.
+                      I hope i know you more so i can say that i love all about you. don't pressure your self about what i said just take your time and if you're ready to answer let me know it. I'm willing to wait on your answer. Sorry for my confession hehe im not good at it but i still try.
+                </p>
+
+                <p>
+                    I hope you always remember that you are
+                    appreciated and valued. Never forget how
+                    special you are.
+                </p>
+
+                <p>
+                    May happiness find you wherever you go,
+                    and may your dreams slowly become reality.
+                </p>
+
+                <div class="signature">
+                    Sincerely,<br>
+                     someone who has a crush on you♡
+                </div>
+
+            </div>
+
+            <div class="flap"></div>
+            <div class="seal">♥</div>
+
+        </div>
+
+    </div>
+
+    <div class="buttons">
+        <button id="open">💌 Open</button>
+        <button id="close">↻ Close</button>
+    </div>
+
+</div>
+
+<script>
+
+// ELEMENTS
+const envelope = document.getElementById("envelope");
+const openBtn = document.getElementById("open");
+const closeBtn = document.getElementById("close");
+const stars = document.getElementById("stars");
+
+// OPEN
+function openLetter() {
+    envelope.classList.add("open");
+}
+
+// CLOSE
+function closeLetter() {
+    envelope.classList.remove("open");
+}
+
+// BUTTON EVENTS
+openBtn.addEventListener("click", openLetter);
+closeBtn.addEventListener("click", closeLetter);
+
+// ENVELOPE CLICK
+envelope.addEventListener("click", function() {
+    envelope.classList.toggle("open");
+});
+
+// BACKGROUND STARS
+for (let i = 0; i < 60; i++) {
+    const star = document.createElement("span");
+
+    star.className = "star";
+    star.textContent = "✦";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.fontSize = (Math.random() * 12 + 5) + "px";
+    star.style.animationDelay = Math.random() * 3 + "s";
+
+    stars.appendChild(star);
+}
+
+// FLOATING HEARTS
+function createHeart() {
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.textContent = ["♥", "♡", "✦"][Math.floor(Math.random() * 3)];
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 12) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 7000);
+}
+
+setInterval(createHeart, 600);
+
+</script>
+
+</body>
+</html>
